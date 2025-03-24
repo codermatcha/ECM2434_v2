@@ -10,5 +10,5 @@ primary_region = "lax" # or your preferred region
   processes = ["app"]
 
 [env]
-  DJANGO_SETTINGS_MODULE = "bingo.settings"
+  DJANGO_SETTINGS_MODULE = "ECM2434_A_2_202425.settings"
   DEBUG = "false"

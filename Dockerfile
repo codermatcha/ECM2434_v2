@@ -13,4 +13,4 @@ ENV PYTHONUNBUFFERED=1
 
 # Run migrations and start the server
 CMD python manage.py migrate && \
-    gunicorn yourproject.wsgi:application --bind 0.0.0.0:8080
+    gunicorn ECM2434_A_2_202425.wsgi:application --bind 0.0.0.0:8080
