@@ -11,7 +11,9 @@ import PatternVisualizer from './PatternVisualizer';
 import EndOfMonthReminder from './EndOfMonthReminder';
 
 // Define the API URL (
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+import config from '../config';
+
+const API_URL = config.API_BASE_URL;
 
 // For storing already shown pattern notifications across sessions/renders
 const getShownPatternNotifications = () => {

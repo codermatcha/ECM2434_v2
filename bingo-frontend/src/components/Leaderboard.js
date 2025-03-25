@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import './Leaderboard.css';
+import config from '../config';
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+const API_URL = config.API_BASE_URL;
 
 const Leaderboard = () => {
     const [lifetimeLeaderboard, setLifetimeLeaderboard] = useState([]);

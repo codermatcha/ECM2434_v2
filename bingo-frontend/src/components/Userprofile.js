@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 // Fetch API URL from environment variables (fallback to localhost if not set)
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+import config from '../config';
+const API_URL = config.API_BASE_URL;
 
 // Default profile picture path with the correct filename
-const DEFAULT_PROFILE_PIC = "/media/profile_pics/default.png";
+const DEFAULT_PROFILE_PIC = "profile_pics/default.png";
 
 const Profile = () => {
   // State variables for user data, completed tasks, edit mode, and profile image

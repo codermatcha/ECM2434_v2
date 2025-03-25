@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Homeboard.css';
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+import config from '../config';
+const API_URL = config.API_BASE_URL;
 
 const Homeboard = () => {
   // State variables for leaderboard data, errors, and loading status

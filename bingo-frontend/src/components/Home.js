@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import config from '../config'; 
 import './Home.css';
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+const API_URL = config.API_BASE_URL;
 
 const Home = () => {
   // State to store fetched tasks (optional for later functionality)
