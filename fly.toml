@@ -1,27 +1,26 @@
-app = "caffeinated-divas"
+# fly.toml app configuration file generated for caffeinated-divas on 2025-03-25T08:04:16Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'caffeinated-divas'
+primary_region = 'lhr'
 
 [build]
-  # Explicitly tell Fly.io to use your Dockerfile
-  builder = "docker"
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
-[env]
-  DEBUG = "false"
-  DJANGO_SETTINGS_MODULE = "ECM2434_A_2_202425.settings"
-  PYTHONPATH = "/code"
-  DATABASE_URL = "postgres://your_db_url_here"  # Add your actual DB URL
+[[mounts]]
+  source = 'vol_vj5d866pyj6newx4'
+  destination = '/data'
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = false
+  auto_stop_machines = 'off'
   auto_start_machines = true
   min_machines_running = 1
 
-[[statics]]
-  guest_path = "/code/staticfiles"  # Changed to match Dockerfile
-  url_prefix = "/static/"
-
-[[mounts]]
-  source = "django_data"
-  destination = "/code/data"
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

@@ -50,7 +50,7 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 5️⃣ CORS Settings (Allow Frontend to Access Backend)
-CORS_ALLOW_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
         "https://caffeinated-divas.fly.dev",
     "http://localhost:3002",  
     "http://127.0.0.1:3002",
@@ -81,7 +81,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-# 7️⃣ Database Setup (Default: SQLite)
+# 7️⃣ Database Setup (Default: SQLite
+
 DATABASES = {
     'default': dj_database_url.config(
         conn_max_age=600,

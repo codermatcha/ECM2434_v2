@@ -10,3 +10,7 @@ git add db.sqlite3
 git commit -m "Add database file for persistence"
 git push
 .qodo
+bingo/urls.py.backup
+bingo/urls.py.bak
+venv/
+*.sqlite3
