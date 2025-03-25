@@ -13,6 +13,9 @@ from django.utils import timezone
 from django.db import transaction
 from .models import User
 from django.utils.timezone import now
+from django.http import HttpResponse
+from django.views.generic import TemplateView
+from django.views.decorators.cache import never_cache
 
 # Django Rest Framework Imports
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -25,7 +28,7 @@ from rest_framework import status
 from .models import PasswordResetToken
 from django.core.mail import send_mail
 from django.conf import settings
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 # Model and Serializer Imports
 from .models import BingoPattern, Task, TaskBonus, UserBadge, UserTask, Leaderboard, Profile, UserConsent
@@ -1331,3 +1334,42 @@ def password_reset_confirm(request):
         logger.error(f"Password reset error: {str(e)}")
         return Response({'error': 'An error occurred during password reset'},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+index = never_cache(TemplateView.as_view(template_name='index.html'))
+
+def home_view(request):
+    # Find all CSS files
+    css_dir = os.path.join(settings.STATIC_ROOT, 'react/static/css')
+    css_files = []
+    if os.path.exists(css_dir):
+        for file in os.listdir(css_dir):
+            if file.endswith('.css'):
+                css_files.append(f'react/static/css/{file}')
+    
+    # Find all JS files
+    js_dir = os.path.join(settings.STATIC_ROOT, 'react/static/js')
+    js_files = []
+    if os.path.exists(js_dir):
+        for file in os.listdir(js_dir):
+            if file.endswith('.js'):
+                js_files.append(f'react/static/js/{file}')
+    
+    return render(request, 'index.html', {
+        'css_files': css_files,
+        'js_files': js_files
+    })
+
+def api_config(request):
+    """Return API configuration to the frontend."""
+    return JsonResponse({
+        'apiBaseUrl': request.build_absolute_uri('/api/')
+    })
+
+def api_test(request):
+    """Test endpoint to verify API connectivity."""
+    return JsonResponse({
+        'status': 'success',
+        'message': 'API is working correctly',
+        'server_time': datetime.datetime.now().isoformat(),
+        'base_url': request.build_absolute_uri('/')
+    })

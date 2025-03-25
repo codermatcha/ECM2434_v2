@@ -1,26 +1,27 @@
 from django.contrib import admin
-from django.urls import path, include
-from django.http import HttpResponse
+from django.http import JsonResponse
+from django.urls import path, include, re_path
+from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
-
-# Test homepage
-def home(request):
-    return HttpResponse("Hello, Django is running!")
-
+def api_config(request):
+    is_prod = request.get_host() == 'caffeinated-divas.fly.dev'
+    return JsonResponse({
+        "apiBaseUrl": "/api",
+        "mediaBaseUrl": "/media",
+        "environment": "production" if is_prod else "development"
+    })
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Django Admin Panel
-    path('', home),  # Homepage at '/'
-    path('api/', include('bingo.urls')),  # Include API routes with 'api/' prefix
+    path('api-config/', api_config, name='api_config'),
+    path('admin/', admin.site.urls),
+    path('api/', include('bingo.urls')),
+    path('', TemplateView.as_view(template_name='index.html'), name='home'),
 ]
 
-# Debug Toolbar (Only if settings.DEBUG is True)
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+urlpatterns += [
+    re_path(r'^(?!admin/|api/|static/|media/).*$', TemplateView.as_view(template_name='index.html')),
+]
+# Add static serving configuration for development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

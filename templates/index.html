@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="{% static 'favicon.ico' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sustainability Bingo</title>
+    <link rel="stylesheet" href="{% static 'static/css/main.489af0b6.css' %}">
+    <script>
+      // Debug API calls in detail
+      window.apiBaseUrl = window.location.origin;
+      console.log('API base URL:', window.apiBaseUrl);
+      
+      // More detailed fetch debugging
+      const originalFetch = window.fetch;
+      window.fetch = function(url, options) {
+        console.log('API REQUEST:', { url, options });
+        
+        try {
+          // Handle localhost URLs
+          if (typeof url === 'string' && url.includes('localhost:8000')) {
+            const newUrl = url.replace('http://localhost:8000', window.location.origin);
+            console.log('REDIRECTING:', url, '->', newUrl);
+            
+            // Return the modified fetch
+            return originalFetch(newUrl, options)
+              .then(response => {
+                console.log('RESPONSE:', response);
+                return response;
+              })
+              .catch(error => {
+                console.error('FETCH ERROR DETAILS:', error);
+                throw error;
+              });
+          }
+          
+          // Regular fetch with error logging
+          return originalFetch(url, options)
+            .then(response => {
+              console.log('RESPONSE:', response);
+              return response;
+            })
+            .catch(error => {
+              console.error('FETCH ERROR DETAILS:', error);
+              throw error;
+            });
+        } catch (error) {
+          console.error('FETCH EXCEPTION:', error);
+          throw error;
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="{% static 'static/js/453.990ad1b9.chunk.js' %}"></script>
+    <script src="{% static 'static/js/main.61a43915.js' %}"></script>
+    <script src="{% static 'js/api_config.js' %}"></script>
+  </body>
+</html>

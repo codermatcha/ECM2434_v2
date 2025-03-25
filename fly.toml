@@ -1,14 +1,27 @@
 app = "caffeinated-divas"
-primary_region = "lax" # or your preferred region
+
+[build]
+  # Explicitly tell Fly.io to use your Dockerfile
+  builder = "docker"
+  dockerfile = "Dockerfile"
+
+[env]
+  DEBUG = "false"
+  DJANGO_SETTINGS_MODULE = "ECM2434_A_2_202425.settings"
+  PYTHONPATH = "/code"
+  DATABASE_URL = "postgres://your_db_url_here"  # Add your actual DB URL
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = false
   auto_start_machines = true
-  min_machines_running = 0
-  processes = ["app"]
+  min_machines_running = 1
 
-[env]
-  DJANGO_SETTINGS_MODULE = "ECM2434_A_2_202425.settings"
-  DEBUG = "false"
+[[statics]]
+  guest_path = "/code/staticfiles"  # Changed to match Dockerfile
+  url_prefix = "/static/"
+
+[[mounts]]
+  source = "django_data"
+  destination = "/code/data"

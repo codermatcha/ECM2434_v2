@@ -1,16 +1,23 @@
+from django.urls import path, re_path, include
+from . import views
+
 from .views import (
     register_user, login_user, check_auth, tasks,
     pending_tasks, complete_task, approve_task,
     leaderboard, update_user_profile, check_developer_role,
     get_user_profile, debug_user_tasks, debug_media_urls, force_award_pattern
-    , reject_task, password_reset_request, password_reset_confirm,get_user_badges
+    , reject_task, password_reset_request, password_reset_confirm,get_user_badges,index,api_test
 )
 
 # URL Patterns
 
-from django.urls import path
-
+from django.urls import path, re_path
+from django.contrib.staticfiles.views import serve
+ 
 urlpatterns = [
+        path('api-config/', views.api_config, name='api_config'),
+        path('api/test/', api_test, name='api_test'),
+    path('', views.home_view, name='home'),
     path('register/', register_user, name='register_user'),
     path('login/', login_user, name='login_user'),
     path('check-auth/', check_auth, name='check_auth'),
@@ -29,4 +36,6 @@ urlpatterns = [
     path('reject-task/', reject_task, name='reject_task'),
     path('password-reset/', password_reset_request, name='password_reset_request'),
     path('password-reset/confirm/', password_reset_confirm, name='password_reset_confirm'),
+    path('manifest.json', serve, {'path': 'manifest.json'}),
+    re_path('.*', index, name='index'),
 ]

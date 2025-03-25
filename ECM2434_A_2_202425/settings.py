@@ -1,14 +1,15 @@
 import os
 from pathlib import Path
+import dj_database_url
 
 # 1️⃣ Base Directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 2️⃣ Security Settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-secret-key')
-DEBUG = True # Change to False in production
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','caffeinated-divas.ondigitalocean.app', 'caffeinated-divas.co.uk','caffeinated-divas.fly.dev']
 TIME_ZONE = 'Europe/London'
 
 # 3️⃣ Installed Apps
@@ -36,6 +37,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'ECM2434_A_2_202425.middleware.APIRedirectMiddleware',
+        'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware', # Allow frontend requests
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -44,8 +47,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # 5️⃣ CORS Settings (Allow Frontend to Access Backend)
 CORS_ALLOWED_ORIGINS = [
+        "https://caffeinated-divas.fly.dev",
     "http://localhost:3002",  
     "http://127.0.0.1:3002",
     "http://localhost:3000",  
@@ -77,11 +83,11 @@ REST_FRAMEWORK = {
 
 # 7️⃣ Database Setup (Default: SQLite)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': BASE_DIR / "db.sqlite3",
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=False
+    )
 }
 
 # 8️⃣ Password Validation
@@ -145,10 +151,15 @@ SIMPLE_JWT = {
     'USER_AUTHENTICATION_RULE': 'ECM2434_A_2_202425.auth_utils.custom_user_authentication_rule',
 }
 
+REACT_APP_DIR = os.path.join(BASE_DIR, 'bingo-frontend', 'build')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],  # You can modify this if needed
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'bingo-frontend', 'build')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -179,12 +190,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend as fallback
 ]
 
-SSTATIC_URL = '/static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # This path needs to match the directory you created
+    os.path.join(BASE_DIR, 'bingo-frontend/build'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For collected static files
-
 
 # Email settings for development
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
